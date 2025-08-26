@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reportes - Inventario INA</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("/imagenes/n3.jpg") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .report-card {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px 25px;
+      width: 100%;
+      max-width: 1200px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: fadeIn 0.8s ease-out;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    h1, h2 {
+      color: #EDA232;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    input[type="text"], input[type="date"], select {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid #EDA232;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      box-shadow: 0 0 8px #D1903F;
+      border-color: #EDA232;
+    }
+
+    button, a.button-link, .export-links a {
+      background-color: #EDA232;
+      border: 2px solid #F0AA11;
+      border-radius: 50px;
+      color: white;
+      font-weight: 500;
+      padding: 8px 15px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover, a.button-link:hover, .export-links a:hover {
+      transform: scale(1.05);
+      background-color: #CC8023;
+      box-shadow: 0 0 10px rgba(237,162,50,0.8);
+      text-decoration: none;
+      color: white;
+    }
+     a.volver { display:inline-block; margin-top:10px; color:#EDA232; text-decoration:none; font-weight:bold; }
+ a.volver:hover { color:#CC8023; }
+
+    .export-links {
+      margin-top: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #EDA232;
+    }
+
+    th {
+      background-color: rgba(237,162,50,0.8);
+      color: white;
+    }
+
+    td img {
+      border-radius: 5px;
+    }
+
+    td a {
+      color: #EDA232;
+      margin: 0 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    td a:hover {
+      color: #CC8023;
+    }
+
+    a.menu-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #EDA232;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a.menu-link:hover {
+      color: #CC8023;
+      text-decoration: underline;
+    }
+
+    footer {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+   
+
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MEDIA QUERIES PARA RESPONSIVE */
+    @media(max-width: 992px) {
+      form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      input[type="text"], input[type="date"], select, button {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .report-card table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+
+    @media(max-width: 768px) {
+      .report-card { padding: 20px 15px; }
+    }
+
+    @media(max-width: 576px) {
+      h1, h2 {
+        font-size: 1.4rem;
+      }
+
+      .report-card {
+        padding: 15px 10px;
+      }
+
+      .export-links a {
+        display: block;
+        margin-bottom: 5px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="particles-js"></div>
+
+  <div class="main-container">
+
+    <!-- Reportes de Componentes -->
+    <div class="report-card">
+      <h1>📊 Reportes de Componentes</h1>
+
+      <form method="GET" action="/reportes">
+        <label>Categoría:</label>
+        <select name="categoria">
+          <option value="">-- Todas --</option>
+          <% if (typeof categorias !== 'undefined') { %>
+            <% categorias.forEach(cat => { %>
+              <option value="<%= cat.id %>" <%= (typeof filtroCategoria !== 'undefined' && filtroCategoria == cat.id) ? 'selected' : '' %>><%= cat.nombre %></option>
+            <% }) %>
+          <% } %>
+        </select>
+
+        <label>Ubicación:</label>
+        <select name="ubicacion">
+          <option value="">-- Todas --</option>
+          <% if (typeof ubicaciones !== 'undefined') { %>
+            <% ubicaciones.forEach(ubi => { %>
+              <option value="<%= ubi.id %>" <%= (typeof filtroUbicacion !== 'undefined' && filtroUbicacion == ubi.id) ? 'selected' : '' %>><%= ubi.nombre %></option>
+            <% }) %>
+          <% } %>
+        </select>
+
+        <button type="submit">Filtrar</button>
+      </form>
+
+      <% if (typeof componentes !== 'undefined' && componentes.length > 0) { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Ubicación</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% componentes.forEach(comp => { %>
+              <tr>
+                <td><%= comp.nombre %></td>
+                <td><%= comp.categoria || 'Sin categoría' %></td>
+                <td><%= comp.ubicacion || 'Sin ubicación' %></td>
+                <td><%= comp.cantidad %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <p>No hay componentes para esta selección.</p>
+      <% } %>
+
+      <div class="export-links">
+        <a href="/reportes/export/excel?<%= (typeof filtroCategoria !== 'undefined' && filtroCategoria ? 'categoria=' + filtroCategoria : '') %>&<%= (typeof filtroUbicacion !== 'undefined' && filtroUbicacion ? 'ubicacion=' + filtroUbicacion : '') %>">📄 Exportar a Excel</a>
+        <a href="/reportes/export/pdf?<%= (typeof filtroCategoria !== 'undefined' && filtroCategoria ? 'categoria=' + filtroCategoria : '') %>&<%= (typeof filtroUbicacion !== 'undefined' && filtroUbicacion ? 'ubicacion=' + filtroUbicacion : '') %>">📝 Exportar a PDF</a>
+      </div>
+    </div>
+
+    <!-- Historial -->
+    <div class="report-card">
+      <h2>📋 Reportes de Préstamos y Devoluciones</h2>
+
+      <form method="GET" action="/reportes/historial" class="row g-3 align-items-end">
+  <div class="col-md-3">
+    <label for="fechaDesde" class="form-label">Fecha desde:</label>
+    <input type="date" class="form-control" id="fechaDesde" name="fechaDesde"
+           value="<%= typeof fechaDesde !== 'undefined' ? fechaDesde : '' %>">
+  </div>
+
+  <div class="col-md-3">
+    <label for="fechaHasta" class="form-label">Fecha hasta:</label>
+    <input type="date" class="form-control" id="fechaHasta" name="fechaHasta"
+           value="<%= typeof fechaHasta !== 'undefined' ? fechaHasta : '' %>">
+  </div>
+
+  <div class="col-md-3">
+      <label for="persona">Persona</label>
+      <input type="text" id="persona" name="persona" class="form-control"
+             list="usuariosList" value="<%= typeof personaFiltro !== 'undefined' ? personaFiltro : '' %>">
+      <datalist id="usuariosList">
+        <% if (typeof usuarios !== 'undefined' && usuarios.length > 0) { %>
+          <% usuarios.forEach(usuario => { %>
+            <option value="<%= usuario.nombre %>"><%= usuario.nombre %> (<%= usuario.rol %>)</option>
+          <% }) %>
+        <% } %>
+      </datalist>
+    </div>
+
+  <div class="col-md-3 d-flex align-items-end">
+    <button type="submit" class="btn w-100" style="background-color: #EDA232; border-color: #F0AA11; color: white;">Filtrar Historial</button>
+  </div>
+</form>
+
+
+
+
+      <% if (typeof historial !== 'undefined' && historial.length > 0) { %>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Componente</th>
+              <th>Movimiento</th>
+              <th>Cantidad</th>
+              <th>Persona</th>
+              <th>Observaciones</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% historial.forEach(h => { %>
+              <tr>
+                <td><%= h.id %></td>
+                <td><%= h.componente %></td>
+                <td><%= h.movimiento %></td>
+                <td><%= h.cantidad %></td>
+                <td><%= h.persona %></td>
+                <td><%= h.observaciones || '' %></td>
+                <td><%= new Date(h.fecha).toLocaleString() %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <p>No hay registros de historial para esta selección.</p>
+      <% } %>
+
+      <div class="export-links">
+        <a href="/reportes/historial/excel?<%= (typeof fechaDesde !== 'undefined' && fechaDesde ? 'fechaDesde=' + fechaDesde : '') %>&<%= (typeof fechaHasta !== 'undefined' && fechaHasta ? 'fechaHasta=' + fechaHasta : '') %>&<%= (typeof personaFiltro !== 'undefined' && personaFiltro ? 'persona=' + personaFiltro : '') %>">📄 Exportar a Excel</a>
+        <a href="/reportes/historial/pdf?<%= (typeof fechaDesde !== 'undefined' && fechaDesde ? 'fechaDesde=' + fechaDesde : '') %>&<%= (typeof fechaHasta !== 'undefined' && fechaHasta ? 'fechaHasta=' + fechaHasta : '') %>&<%= (typeof personaFiltro !== 'undefined' && personaFiltro ? 'persona=' + personaFiltro : '') %>">📝 Exportar a PDF</a>
+      </div>
+    </div>
+
+    <a href="/" class="volver">⬅ Volver al menú principal</a>
+  </div>
+
+  <footer class="text-center mt-3 mb-2">
+    &copy; 2025 Instituto Nuevo Amanecer - Todos los derechos reservados
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Particles config -->
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 40 },
+        "color": { "value": "#FFD966" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.7 },
+        "size": { "value": 4 },
+        "line_linked": { 
+          "enable": true, 
+          "distance": 120, 
+          "color": "#ffffff", 
+          "opacity": 0.9, 
+          "width": 1.5
+        },
+        "move": { "enable": true, "speed": 1 }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" },
+          "onclick": { "enable": true, "mode": "push" }
+        }
+      },
+      "retina_detect": true
+    });
+  </script>
+</body>
+</html>

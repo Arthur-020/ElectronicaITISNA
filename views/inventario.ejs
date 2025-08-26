@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventario de Componentes Electrónicos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    body, html {
+      margin:0; padding:0; width:100%; min-height:100vh; font-family:'Segoe UI',sans-serif; 
+      background:url("/imagenes/n3.jpg") no-repeat center center fixed; background-size:cover; 
+      display:flex; flex-direction:column;
+    }
+    #particles-js { position:fixed;width:100%;height:100%;top:0;left:0;z-index:0; }
+
+    .container-main { flex:1; display:flex; justify-content:center; padding:40px 20px; position:relative; z-index:1; }
+    .inventario-container {
+      background:rgba(255,255,255,0.25); backdrop-filter:blur(10px); border-radius:15px; padding:30px;
+      width:100%; max-width:1200px; box-shadow:0 8px 20px rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.2);
+      animation:fadeIn 1s ease-out;
+    }
+
+    h1 { color:#EDA232; font-weight:bold; text-align:center; margin-bottom:25px; }
+
+    form { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; align-items:center; }
+    input[type="text"], select { padding:8px 12px; border-radius:10px; border:1px solid #EDA232; flex:1; }
+
+    button, a.button-link { background-color:#EDA232; border:2px solid #F0AA11; border-radius:50px; color:white; font-weight:500; padding:8px 15px; text-decoration:none; transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s; }
+    button:hover, a.button-link:hover { transform:scale(1.05); background-color:#CC8023; box-shadow:0 0 10px rgba(237,162,50,0.8); }
+
+    .table-responsive { overflow-x:auto; }
+
+    table { width:100%; border-collapse:collapse; margin-bottom:20px; background:rgba(255,255,255,0.85); border-radius:10px; overflow:hidden; min-width:600px; }
+    th, td { padding:10px; text-align:center; border-bottom:1px solid #EDA232; vertical-align:middle; }
+    th { background-color:rgba(237,162,50,0.8); color:white; }
+    td img { border-radius:5px; }
+
+    /* Botones verticales */
+.acciones-td .btn { 
+    font-size:0.85rem; 
+    padding:5px 8px; 
+    min-width:90px; 
+    margin-bottom:5px; 
+    width:100%; 
+    border-radius:12px;
+    font-weight:500;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+/* Prestamo */
+.acciones-td .btn-success { 
+    background-color:#28a745; 
+    border-color:#28a745; 
+    color:white;
+}
+.acciones-td .btn-success:hover { 
+    background-color:#218838; 
+    box-shadow:0 5px 15px rgba(33,136,56,0.4);
+}
+
+/* Editar */
+.acciones-td .btn-warning { 
+    background-color:#FFD966; 
+    border-color:#F0AA11; 
+    color:#333; 
+}
+.acciones-td .btn-warning:hover { 
+    background-color:#F0AA11; 
+    color:white;
+    box-shadow:0 5px 15px rgba(240,170,17,0.4);
+}
+
+/* Eliminar */
+.acciones-td .btn-danger { 
+    background-color:#F06565; 
+    border-color:#E53E3E; 
+    color:white;
+}
+.acciones-td .btn-danger:hover { 
+    background-color:#E53E3E; 
+    box-shadow:0 5px 15px rgba(229,62,62,0.4);
+}
+
+
+    td .d-flex { flex-direction:column; align-items:center; }
+
+    a.volver { display:inline-block; margin-top:10px; color:#EDA232; text-decoration:none; font-weight:bold; }
+    a.volver:hover { color:#CC8023; }
+
+    footer { background:rgba(0,0,0,0.5); color:white; padding:12px 0; text-align:center; font-size:0.85rem; }
+    @keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <div class="container-main">
+    <div class="inventario-container">
+      <h1>📦 Inventario de Componentes Electrónicos</h1>
+
+      <% if (user && user.rol === 'docente') { %>
+        <a href="/registro" class="button-link mb-3 d-inline-block">Agregar nuevo componente</a>
+      <% } %>
+
+      <form action="/inventario" method="GET">
+        <input type="text" name="busqueda" placeholder="🔍 Buscar por nombre" value="<%= busqueda || '' %>">
+        <select name="tipo">
+          <option value="">-- Filtrar por tipo --</option>
+          <% categorias.forEach(cat => { %>
+            <option value="<%= cat.id %>" <%= tipo == cat.id ? 'selected' : '' %>><%= cat.nombre %></option>
+          <% }) %>
+        </select>
+        <button type="submit">Buscar</button>
+        <% if (busqueda || tipo) { %>
+          <a href="/inventario" class="button-link">Limpiar filtros</a>
+        <% } %>
+      </form>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Tipo</th>
+              <th>Cantidad</th>
+              <th>Ubicación</th>
+              <th>Estado</th>
+              <th>Descripción</th>
+              <th>Imagen</th>
+              <% if (user && user.rol === 'docente') { %><th>Acciones</th><% } %>
+            </tr>
+          </thead>
+          <tbody>
+            <% componentes.forEach(componente => { %>
+              <tr>
+                <td><%= componente.id %></td>
+                <td><%= componente.nombre %></td>
+                <td><%= componente.tipo_nombre || 'Sin tipo' %></td>
+                <td><%= componente.cantidad %></td>
+                <td><%= componente.ubicacion_nombre || 'Sin ubicación' %></td>
+                <td><%= componente.estado %></td>
+                <td><%= componente.descripcion %></td>
+                <td>
+                  <% if (componente.imagen) { %>
+                    <img src="<%= componente.imagen %>" width="50" />
+                  <% } else { %>
+                    Sin imagen
+                  <% } %>
+                </td>
+                <% if (user && user.rol === 'docente') { %>
+                <td class="acciones-td">
+                  <div class="d-flex">
+                    <a href="/historial?id=<%= componente.id %>&nombre=<%= encodeURIComponent(componente.nombre) %>" class="btn btn-success btn-sm">Prestamo</a>
+                    <a href="/editar/<%= componente.id %>" class="btn btn-warning btn-sm">Editar</a>
+                    <!-- Botón modal eliminar -->
+                    <a href="#" class="btn btn-danger btn-sm" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#eliminarModal" 
+                       data-id="<%= componente.id %>" 
+                       data-nombre="<%= componente.nombre %>">Eliminar</a>
+                  </div>
+                </td>
+                <% } %>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <a href="/" class="volver">⬅ Volver al menú principal</a>
+      
+    </div>
+  </div>
+
+  <!-- Modal Eliminar Componente -->
+  <div class="modal fade" id="eliminarModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="eliminarForm" method="GET" action="">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Eliminar Componente</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>⚠️ ¿Deseas eliminar el componente <strong><span id="modalComponenteNombre"></span></strong>? Esta acción no se puede deshacer.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer>&copy; 2025 Instituto Nuevo Amanecer - Todos los derechos reservados</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": { "number": { "value": 40 }, "color": { "value": "#FFD966" }, "shape": { "type": "circle" },
+        "opacity": { "value": 0.7 }, "size": { "value": 4 }, "line_linked": { "enable": true, "distance": 120, "color": "#ffffff", "opacity": 0.9, "width": 1.5 }, "move": { "enable": true, "speed": 1 } },
+      "interactivity": { "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" } } },
+      "retina_detect": true
+    });
+
+    // Llenar modal de eliminar
+    const eliminarModal = document.getElementById('eliminarModal');
+    eliminarModal.addEventListener('show.bs.modal', event => {
+      const button = event.relatedTarget;
+      const id = button.getAttribute('data-id');
+      const nombre = button.getAttribute('data-nombre');
+
+      document.getElementById('modalComponenteNombre').textContent = nombre;
+      document.getElementById('eliminarForm').action = '/eliminar/' + id;
+    });
+  </script>
+</body>
+</html>

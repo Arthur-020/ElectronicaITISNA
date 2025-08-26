@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Categorías y Ubicaciones - Inventario INA</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("/imagenes/n3.jpg") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    h1 {
+      color: #EDA232;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      gap: 30px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-container {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px 20px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: slideDownFade 0.8s ease-out;
+    }
+
+    h2, h3 {
+      color: #EDA232;
+      margin-bottom: 15px;
+    }
+
+    .form-control, select {
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .form-control:focus, select:focus {
+      box-shadow: 0 0 8px #D1903F;
+      border-color: #E68C1C;
+    }
+
+    .btn-primary {
+      background-color: #EDA232;
+      border: 2px solid #F0AA11;
+      border-radius: 50px;
+      padding: 5px 12px;
+      font-weight: 500;
+      transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.03);
+      background-color: #CC8023;
+      border-color: #F0AA11;
+      box-shadow: 0 0 8px rgba(239,187,117,0.8);
+    }
+
+    .btn-primary:focus, .btn-primary:active {
+      background-color: #EDA232 !important;
+      border-color: #F0AA11 !important;
+      box-shadow: 0 0 10px rgba(239,187,117,0.8) !important;
+      outline: none !important;
+    }
+     a.volver { display:inline-block; margin-top:10px; color:#EDA232; text-decoration:none; font-weight:bold; }
+ a.volver:hover { color:#CC8023; }
+
+    ul.list-unstyled li {
+      margin-bottom: 10px;
+    }
+
+    ul.list-unstyled li a {
+      color: #EDA232;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    ul.list-unstyled li a:hover {
+      color: #CC8023;
+      text-decoration: underline;
+    }
+
+    /* TABLAS responsivas y estilo usuarios */
+    .table-responsive {
+      overflow-x: auto;
+      margin-top: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #D1A15D;
+    }
+
+    th {
+      background-color: rgba(209,161,93,0.9);
+      color: white;
+      font-weight: 600;
+    }
+
+    footer {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    @keyframes slideDownFade {
+      0% { opacity: 0; transform: translateY(-50px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+
+    @media(max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .card-container form.d-flex {
+        flex-direction: column;
+        gap: 5px;
+      }
+      .card-container form.d-flex input {
+        width: 100% !important;
+      }
+      table {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <h1>📁 Categorías y Ubicaciones</h1>
+
+  <div class="main-container">
+    <!-- CATEGORÍAS -->
+    <div class="card-container">
+      <% if (user && user.rol === 'docente') { %>
+        <h2>Agregar Categoría</h2>
+        <form method="POST" action="/categorias_ubicaciones/categorias" class="d-flex gap-2">
+          <input type="text" class="form-control" name="nombre" placeholder="Nombre de la categoría" required />
+          <button type="submit" class="btn btn-primary">Agregar</button>
+        </form>
+      <% } %>
+
+      <h3>Categorías</h3>
+      <ul class="list-unstyled">
+        <% categorias.forEach(cat => { %>
+          <li class="d-flex justify-content-between align-items-center">
+            <a href="/categorias_ubicaciones?categoria=<%= cat.id %>" class="<%= (categoria == cat.id) ? 'selected' : '' %>">
+              <%= cat.nombre %>
+            </a>
+
+            <% if (user && user.rol === 'docente') { %>
+              <div class="d-flex gap-2 align-items-center">
+                <form method="POST" action="/categorias_ubicaciones/categorias/eliminar/<%= cat.id %>" 
+                      onsubmit="return confirm('¿Eliminar categoría <%= cat.nombre %>?');">
+                  <button type="submit" class="btn btn-primary btn-sm">Eliminar</button>
+                </form>
+
+                <form method="POST" action="/categorias_ubicaciones/categorias/editar/<%= cat.id %>" class="d-flex gap-1 align-items-center">
+                  <input type="text" name="nombre" value="<%= cat.nombre %>" class="form-control form-control-sm" style="width:120px;">
+                  <button type="submit" class="btn btn-primary btn-sm">Editar</button>
+                </form>
+              </div>
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+
+    <!-- UBICACIONES -->
+    <div class="card-container">
+      <% if (user && user.rol === 'docente') { %>
+        <h2>Agregar Ubicación</h2>
+        <form method="POST" action="/categorias_ubicaciones/ubicaciones" class="d-flex gap-2">
+          <input type="text" class="form-control" name="nombre" placeholder="Nombre de la ubicación" required />
+          <button type="submit" class="btn btn-primary">Agregar</button>
+        </form>
+      <% } %>
+
+      <h3>Ubicaciones</h3>
+      <ul class="list-unstyled">
+        <% ubicaciones.forEach(ubi => { %>
+          <li class="d-flex justify-content-between align-items-center">
+            <a href="/categorias_ubicaciones?ubicacion=<%= ubi.id %>" class="<%= (ubicacion == ubi.id) ? 'selected' : '' %>">
+              <%= ubi.nombre %>
+            </a>
+
+            <% if (user && user.rol === 'docente') { %>
+              <div class="d-flex gap-2 align-items-center">
+                <form method="POST" action="/categorias_ubicaciones/ubicaciones/eliminar/<%= ubi.id %>" 
+                      onsubmit="return confirm('¿Eliminar ubicación <%= ubi.nombre %>?');">
+                  <button type="submit" class="btn btn-primary btn-sm">Eliminar</button>
+                </form>
+
+                <form method="POST" action="/categorias_ubicaciones/ubicaciones/editar/<%= ubi.id %>" class="d-flex gap-1 align-items-center">
+                  <input type="text" name="nombre" value="<%= ubi.nombre %>" class="form-control form-control-sm" style="width:120px;">
+                  <button type="submit" class="btn btn-primary btn-sm">Editar</button>
+                </form>
+              </div>
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+
+  <% if (categoria || ubicacion) { %>
+    <div class="main-container">
+      <div class="card-container table-responsive">
+        <h3>Componentes filtrados</h3>
+        <% if (!componentes || componentes.length === 0) { %>
+          <p>No hay componentes para esta selección.</p>
+        <% } else { %>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Ubicación</th>
+                <th>Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% componentes.forEach(comp => { %>
+                <tr>
+                  <td><%= comp.nombre %></td>
+                  <td><%= comp.categoria_nombre || 'Sin categoría' %></td>
+                  <td><%= comp.ubicacion_nombre || 'Sin ubicación' %></td>
+                  <td><%= comp.cantidad %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </div>
+  <% } %>
+
+  <div class="text-center my-3">
+    <a href="/" class="volver">⬅ Volver al menú principal</a>
+  </div>
+
+  <footer>
+    &copy; 2025 Instituto Nuevo Amanecer - Todos los derechos reservados
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 40 },
+        "color": { "value": "#FFD966" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.7 },
+        "size": { "value": 4 },
+        "line_linked": { 
+          "enable": true, 
+          "distance": 120, 
+          "color": "#ffffff", 
+          "opacity": 0.9, 
+          "width": 1.5
+        },
+        "move": { "enable": true, "speed": 1 }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" },
+          "onclick": { "enable": true, "mode": "push" }
+        }
+      },
+      "retina_detect": true
+    });
+  </script>
+</body>
+</html>

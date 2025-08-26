@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Menú Principal - Inventario INA</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("/imagenes/n3.jpg") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(237,162,50,0.9);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 2;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      color: #fff !important;
+    }
+    .nav-link {
+      color: #fff !important;
+      font-weight: 500;
+    }
+    .nav-link:hover {
+      color: #FFD580 !important;
+    }
+
+    /* Escudo dentro del navbar */
+    .escudo-navbar {
+      height: 50px;
+      width: auto;
+      border-radius: 5px;
+      border: 1px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      margin-right: 10px;
+    }
+
+    /* Contenedor principal */
+    .container-main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .menu-container {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      width: 100%;
+      max-width: 1100px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: fadeIn 1s ease-out;
+    }
+
+    .menu-container h1 {
+      color: #EDA232;
+      font-weight: bold;
+      margin-bottom: 25px;
+    }
+
+    /* Tarjetas */
+    .card {
+      background: rgba(255,255,255,0.85);
+      border-radius: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(237,162,50,0.6);
+    }
+    .card-title {
+      color: #CC8023;
+      font-weight: bold;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      z-index: 2;
+    }
+    footer a {
+      color: #ffc107;
+      text-decoration: none;
+      margin: 0 6px;
+    }
+    footer a:hover {
+      color: #fff;
+      text-shadow: 0 0 5px #ffc107;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Ajustes responsive */
+@media (max-width: 768px) {
+  .escudo-navbar {
+    height: 40px;
+    margin-right: 5px;
+  }
+  .navbar-brand {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  .nav-link {
+    font-size: 0.85rem;
+  }
+  .menu-container {
+    padding: 20px;
+  }
+  .card-title {
+    font-size: 1.1rem;
+  }
+  .card-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar .container {
+    flex-wrap: wrap;
+  }
+  .escudo-navbar {
+    margin-bottom: 5px;
+  }
+  .menu-container h1 {
+    font-size: 1.5rem;
+  }
+  .row > div {
+    margin-bottom: 15px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Partículas -->
+  <div id="particles-js"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container d-flex align-items-center">
+      
+      <!-- Escudo integrado -->
+      <img src="/imagenes/n6.png" alt="Escudo Carrera" class="escudo-navbar">
+
+      <a class="navbar-brand mb-0 h1" href="#">Inventario "Carrera de Electronica"</a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <span class="nav-link">Usuario: <%= user.nombre %> (<%= user.rol %>)</span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Cerrar sesión</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenedor principal -->
+  <div class="container-main">
+    <div class="menu-container">
+      <h1 class="text-center">Menú Principal</h1>
+
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="/inventario" class="text-decoration-none">
+            <div class="card text-center h-100 shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">📦 Inventario</h2>
+                <p class="card-text">Gestiona los componentes electrónicos</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="/categorias_ubicaciones" class="text-decoration-none">
+            <div class="card text-center h-100 shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">📁 Categorías y Ubicaciones</h2>
+                <p class="card-text">Administrar categorías y ubicaciones</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="/historial" class="text-decoration-none">
+            <div class="card text-center h-100 shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">🧾 Historial</h2>
+                <p class="card-text">Ver movimientos de préstamos y devoluciones</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="/contacto" class="text-decoration-none">
+            <div class="card text-center h-100 shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">✉️ Contacto</h2>
+                <p class="card-text">Enviar mensajes al administrador</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <% if (user.rol === 'docente') { %>
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="/reportes" class="text-decoration-none">
+            <div class="card text-center h-100 shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">📈 Reportes</h2>
+                <p class="card-text">Generar reportes de inventario y historial</p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-4">
+          <a href="/usuarios" class="text-decoration-none">
+            <div class="card text-center h-100 shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title">👤 Usuarios</h2>
+                <p class="card-text">Gestión de cuentas y roles</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Instituto Nuevo Amanecer - Todos los derechos reservados
+    <br>
+    Síguenos: 
+    <a href="https://www.facebook.com/inst.itisna/photos?locale=es_LA" target="_blank">Facebook</a> |
+    <a href="#" target="_blank">Instagram</a> |
+    <a href="#" target="_blank">Tiktok</a>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Partículas config -->
+  <script>
+particlesJS("particles-js", {
+  "particles": {
+    "number": { "value": 40 },
+    "color": { "value": "#FFD966" },
+    "shape": { "type": "circle" },
+    "opacity": { "value": 0.7 },
+    "size": { "value": 4 },
+    "line_linked": { 
+      "enable": true, 
+      "distance": 120, 
+      "color": "#ffffff", 
+      "opacity": 0.9, 
+      "width": 1.5
+    },
+    "move": { "enable": true, "speed": 1 }
+  },
+  "interactivity": {
+    "events": {
+      "onhover": { "enable": true, "mode": "repulse" },
+      "onclick": { "enable": true, "mode": "push" }
+    }
+  },
+  "retina_detect": true
+});
+  </script>
+
+</body>
+</html>

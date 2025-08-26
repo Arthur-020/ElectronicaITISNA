@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - Inventario INA</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: url("/imagenes/n3.jpg") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .main-container {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .login-card {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 40px 30px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+      text-align: center;
+      animation: slideDownFade 0.8s ease-out;
+    }
+
+    .logos-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .login-logo {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    /* Título y labels en naranja */
+    h3, .form-label {
+      color: #F0AA11 !important;
+      font-weight: bold;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+
+    .form-control:focus {
+      box-shadow: 0 0 8px #D1903F;
+      border-color: #E68C1C;
+    }
+
+    /* Botón naranja */
+    .btn-primary {
+      background-color: #EDA232 !important; 
+      border: 2px solid #F0AA11 !important; 
+      border-radius: 50px;
+      padding: 10px 0;
+      font-weight: 500;
+      transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.03);
+      background-color: #CC8023 !important;
+      border-color: #F0AA11 !important;
+      box-shadow: 0 0 10px rgba(239, 187, 117, 0.8);
+    }
+
+    /* Evitar que se ponga azul al hacer clic */
+    .btn-primary:active,
+    .btn-primary:focus {
+      background-color: #EDA232 !important;
+      border-color: #F0AA11 !important;
+      box-shadow: 0 0 10px rgba(239, 187, 117, 0.8);
+      outline: none;
+    }
+
+    footer {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 0.85rem;
+      z-index: 1;
+    }
+
+    footer a {
+      color: #ffc107;
+      text-decoration: none;
+      margin: 0 6px;
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+
+    footer a:hover {
+      color: #fff;
+      text-shadow: 0 0 3px #ffc107;
+      text-decoration: underline;
+    }
+
+    @keyframes slideDownFade {
+      0% {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media(max-width: 576px) {
+      .login-card {
+        padding: 30px 20px;
+      }
+      .login-logo {
+        width: 70px;
+        height: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="particles-js"></div>
+
+  <div class="main-container">
+    <div class="login-card">
+      <div class="logos-container">
+        <img src="/imagenes/n2.jpg" alt="Logo 1" class="login-logo">
+        <img src="/imagenes/n6.png" alt="Logo 2" class="login-logo">
+      </div>
+      
+      <h3 class="mb-4">Iniciar sesión</h3>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger text-center"><%= error %></div>
+      <% } %>
+
+      <form action="/login" method="POST">
+        <div class="mb-3 text-start">
+          <label for="usuario" class="form-label">Usuario:</label>
+          <input type="text" class="form-control" name="usuario" required placeholder="Ingrese su usuario">
+        </div>
+
+        <div class="mb-3 text-start">
+          <label for="contrasena" class="form-label">Contraseña:</label>
+          <input type="password" class="form-control" name="contrasena" required placeholder="Ingrese su contraseña">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Instituto Nuevo Amanecer - Todos los derechos reservados
+    <br>
+    Síguenos: 
+    <a href="https://www.facebook.com/inst.itisna/photos?locale=es_LA" target="_blank">Facebook</a> |
+    <a href="#" target="_blank">Instagram</a> |
+    <a href="#" target="_blank">Tiktok</a>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+particlesJS("particles-js", {
+  "particles": {
+    "number": { "value": 40 },
+    "color": { "value": "#FFD966" },
+    "shape": { "type": "circle" },
+    "opacity": { "value": 0.7 },
+    "size": { "value": 4 },
+    "line_linked": { 
+      "enable": true, 
+      "distance": 120, 
+      "color": "#ffffff", 
+      "opacity": 0.9, 
+      "width": 1.5
+    },
+    "move": { "enable": true, "speed": 1 }
+  },
+"interactivity": {
+  "detect_on": "window",  // 👈 cambia esto
+  "events": {
+    "onhover": { "enable": true, "mode": "repulse" },
+    "onclick": { "enable": true, "mode": "push" }
+  },
+  "modes": {   
+    "repulse": { "distance": 120 }, 
+    "push": { "particles_nb": 4 }
+  }
+},
+  "retina_detect": true
+});
+</script>
+
+</body>
+</html>

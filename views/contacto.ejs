@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contacto - Inventario INA</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+     <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("/imagenes/n3.jpg") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .contact-container {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    h1 {
+      color: #EDA232;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    form label {
+      font-weight: 500;
+      color: #fff;
+      margin-top: 15px;
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid #EDA232;
+      margin-top: 5px;
+    }
+
+    form input:focus, form textarea:focus {
+      box-shadow: 0 0 8px #D1903F;
+      border-color: #E68C1C;
+      outline: none;
+    }
+
+    .btn-primary {
+      background-color: #EDA232;
+      border: 2px solid #F0AA11;
+      border-radius: 50px;
+      color: white;
+      font-weight: 500;
+      padding: 8px 15px;
+      margin-top: 15px;
+      width: 100%;
+      transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+/* Evitar que se ponga azul al hacer clic o al enfocarse */
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary:focus:active {
+  background-color: #EDA232 !important; /* mismo naranja */
+  border-color: #F0AA11 !important;
+  box-shadow: 0 0 10px rgba(239, 187, 117, 0.8) !important;
+  outline: none !important;
+}
+
+    .btn-primary:hover {
+      transform: scale(1.03);
+      background-color: #CC8023;
+      border: 2px solid #F0AA11;
+      box-shadow: 0 0 8px rgba(239,187,117,0.8);
+    }
+
+    .message {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .success { color: #00a000; }
+    .error { color: #ff0000; }
+
+    a.volver {
+      display: inline-block;
+      margin-top: 15px;
+      color: #EDA232;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    a.volver:hover {
+      color: #CC8023;
+    }
+    footer {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+            /* Fondo partículas */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+     <!-- Partículas -->
+  <div id="particles-js"></div>
+
+
+  <div class="main-container">
+    <div class="contact-container">
+      <h1>📬 Contacto</h1>
+
+      <% if (mensaje) { %>
+        <p class="message <%= tipo %>"><%= mensaje %></p>
+      <% } %>
+
+      <form method="POST" action="/contacto">
+        <label>Tu nombre:</label>
+        <input type="text" name="nombre" required>
+
+        <label>Tu correo:</label>
+        <input type="email" name="correo" required>
+
+        <label>Mensaje:</label>
+        <textarea name="mensaje" rows="5" required></textarea>
+
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
+
+      <a href="/" class="volver">⬅ Volver al menú principal</a>
+    </div>
+  </div>
+  <footer>
+    &copy; 2025 Instituto Nuevo Amanecer - Todos los derechos reservados
+  </footer>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+particlesJS("particles-js", {
+  "particles": {
+    "number": { "value": 40 },
+    "color": { "value": "#FFD966" },
+    "shape": { "type": "circle" },
+    "opacity": { "value": 0.7 },  // más visibles
+    "size": { "value": 4 },       // un poco más grandes
+    "line_linked": { 
+      "enable": true, 
+      "distance": 120, 
+      "color": "#ffffff", 
+      "opacity": 0.9, 
+      "width": 1.5
+    },
+    "move": { "enable": true, "speed": 1 }
+  },
+  "interactivity": {
+    "events": {
+      "onhover": { "enable": true, "mode": "repulse" },
+      "onclick": { "enable": true, "mode": "push" }
+    }
+  },
+  "retina_detect": true
+});
+  </script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editar componente - Inventario INA</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("/imagenes/n3.jpg") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .main-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .edit-card {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px 25px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: slideDownFade 0.8s ease-out;
+    }
+
+    .edit-card h1 {
+      color: #EDA232;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .form-control, select, textarea {
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .form-control:focus, select:focus, textarea:focus {
+      box-shadow: 0 0 8px #D1903F;
+      border-color: #E68C1C;
+    }
+
+    .btn-primary {
+      background-color: #EDA232;
+      border: 2px solid #F0AA11;
+      border-radius: 50px;
+      padding: 10px 0;
+      width: 100%;
+      font-weight: 500;
+      transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary:active,
+    .btn-primary:focus,
+    .btn-primary:focus:active {
+      background-color: #EDA232 !important;
+      border-color: #F0AA11 !important;
+      box-shadow: 0 0 10px rgba(239, 187, 117, 0.8) !important;
+      outline: none !important;
+    }
+    a.volver { display:inline-block; margin-top:10px; color:#EDA232; text-decoration:none; font-weight:bold; }
+ a.volver:hover { color:#CC8023; }
+
+    .btn-primary:hover {
+      transform: scale(1.03);
+      background-color: #CC8023;
+      border: 2px solid #F0AA11;
+      box-shadow: 0 0 10px rgba(239,187,117,0.8);
+    }
+
+    /* Enlaces */
+    a {
+      color: #EDA232;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+      color: #CC8023;
+    }
+
+    /* Etiquetas de imagen */
+    label {
+      color: #EDA232;
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+
+    /* Imagenes con sombras y borde redondeado */
+    .preview-img {
+      max-width: 100px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: block;
+    }
+
+    footer {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 12px 0;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    @keyframes slideDownFade {
+      0% { opacity: 0; transform: translateY(-50px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+
+    @media(max-width: 576px) {
+      .edit-card {
+        padding: 25px 15px;
+      }
+    }
+
+    /* Fondo partículas */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Partículas -->
+  <div id="particles-js"></div>
+
+  <div class="main-container">
+    <div class="edit-card">
+      <h1>Editar: <%= componente.nombre %></h1>
+
+      <form action="/editar/<%= componente.id %>" method="POST" enctype="multipart/form-data">
+        <input type="text" class="form-control" name="nombre" value="<%= componente.nombre %>" placeholder="Nombre" required>
+
+        <select name="tipo" class="form-control" required>
+          <% categorias.forEach(categoria => { %>
+            <option value="<%= categoria.id %>" <%= categoria.id === componente.tipo ? 'selected' : '' %>><%= categoria.nombre %></option>
+          <% }) %>
+        </select>
+
+        <input type="number" class="form-control" name="cantidad" value="<%= componente.cantidad %>" placeholder="Cantidad" required>
+
+        <select name="ubicacion" class="form-control" required>
+          <% ubicaciones.forEach(ubicacion => { %>
+            <option value="<%= ubicacion.id %>" <%= ubicacion.id === componente.ubicacion ? 'selected' : '' %>><%= ubicacion.nombre %></option>
+          <% }) %>
+        </select>
+
+        <select name="estado" class="form-control" required>
+          <option value="Bien" <%= componente.estado === 'Bien' ? 'selected' : '' %>>Bien</option>
+          <option value="Regular" <%= componente.estado === 'Regular' ? 'selected' : '' %>>Regular</option>
+          <option value="Malo" <%= componente.estado === 'Malo' ? 'selected' : '' %>>Malo</option>
+        </select>
+
+        <textarea class="form-control" name="descripcion" placeholder="Descripción" required><%= componente.descripcion %></textarea>
+
+        <!-- Imagen actual -->
+        <% if (componente.imagen) { %>
+          <label>Imagen actual:</label>
+          <img src="<%= componente.imagen %>" alt="Imagen actual" class="preview-img">
+        <% } %>
+
+        <!-- Cambiar imagen -->
+        <label>Cambiar imagen:</label>
+        <input type="file" class="form-control" name="imagen" id="imagenInput">
+        <img id="previewNuevaImagen" class="preview-img" style="display:none;">
+
+        <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
+      </form>
+
+      <div class="mt-3 text-center">
+        <a href="/inventario" class="volver">⬅ Volver al Inventario</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Instituto Nuevo Amanecer - Todos los derechos reservados
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Partículas
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 40 },
+        "color": { "value": "#FFD966" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.7 },
+        "size": { "value": 4 },
+        "line_linked": { 
+          "enable": true, 
+          "distance": 120, 
+          "color": "#ffffff", 
+          "opacity": 0.9, 
+          "width": 1.5
+        },
+        "move": { "enable": true, "speed": 1 }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" },
+          "onclick": { "enable": true, "mode": "push" }
+        }
+      },
+      "retina_detect": true
+    });
+
+    // Previsualización de nueva imagen
+    const imagenInput = document.getElementById('imagenInput');
+    const preview = document.getElementById('previewNuevaImagen');
+
+    imagenInput.addEventListener('change', function(){
+      const file = this.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = function(e){
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = '';
+        preview.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>

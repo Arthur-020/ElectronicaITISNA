@@ -1,0 +1,30 @@
+{
+  "name": "israel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cloudinary": "^2.7.0",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.17.3",
+    "moment": "^2.30.1",
+    "multer": "^1.4.5-lts.2",
+    "pg": "^8.16.0",
+    "sqlite3": "^5.1.7",
+    "nodemailer": "^6.9.4",
+    "exceljs": "^4.3.0",
+    "pdfkit": "^0.13.0"
+    
+  }
+}

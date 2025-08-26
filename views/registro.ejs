@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registrar Componente - Inventario INA</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    body, html {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("/imagenes/n3.jpg") no-repeat center center fixed;
+      background-size: cover;
+      display: flex; flex-direction: column; min-height: 100vh;
+      
+    }
+    #particles-js { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; }
+
+    .main-container {
+      flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px; z-index: 1; position: relative;
+    }
+
+    .register-card {
+      background: rgba(255,255,255,0.25); backdrop-filter: blur(10px); border-radius: 15px;
+      padding: 40px 30px; max-width: 500px; width: 100%; box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2); animation: slideDownFade 0.8s ease-out; text-align: center;
+    }
+
+    h1 { color: #EDA232; margin-bottom: 25px; }
+    label { color: #EDA232; font-weight: bold; display: block; margin: 10px 0 5px; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+
+    .form-control, select, textarea { border-radius: 10px; margin-bottom: 15px; }
+    .form-control:focus, select:focus, textarea:focus { box-shadow: 0 0 8px #D1903F; border-color: #E68C1C; }
+
+    .register-card .btn-primary {
+      background-color: #EDA232; border: 2px solid #F0AA11; border-radius: 50px; padding: 10px 0;
+      width: 100%; font-weight: 500; transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+    .register-card .btn-primary:hover { transform: scale(1.03); background-color: #CC8023 ; box-shadow: 0 0 10px rgba(239,187,117,0.8); }
+
+/* Evitar que se ponga azul al hacer clic */
+    .btn-primary:active,
+    .btn-primary:focus {
+      background-color: #EDA232 !important;
+      border-color: #F0AA11 !important;
+      box-shadow: 0 0 10px rgba(239, 187, 117, 0.8);
+      outline: none;
+    }
+
+    .image-preview { width: 150px; height: 150px; border-radius: 15px; overflow: hidden; display: flex; justify-content: center; align-items: center; margin: 10px auto; border: 2px solid rgba(237,162,50,0.5); }
+    .image-preview img { max-width: 100%; max-height: 100%; object-fit: cover; border-radius: 10px; transition: transform 0.3s, box-shadow 0.3s; }
+    .image-preview img:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+
+    .alert { font-weight: bold; }
+
+    footer { background: rgba(0,0,0,0.5); color: white; padding: 12px 0; text-align: center; font-size: 0.85rem; }
+
+    a.volver { display:inline-block; margin-top:10px; color:#EDA232; text-decoration:none; font-weight:bold; }
+ a.volver:hover { color:#CC8023; }
+
+    @keyframes slideDownFade { 0% { opacity: 0; transform: translateY(-50px);} 100% { opacity: 1; transform: translateY(0);} }
+
+    @media(max-width: 768px) { .register-card { padding: 20px; width: 95%; } }
+  </style>
+</head>
+<body>
+
+
+
+<div id="particles-js"></div>
+
+<div class="main-container">
+  <div class="register-card">
+    <h1>Registrar Componente</h1>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+      <div class="alert alert-success text-center"><%= success %></div>
+    <% } %>
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-danger text-center"><%= error %></div>
+    <% } %>
+
+    <form action="/agregar" method="POST" enctype="multipart/form-data" id="formComponente">
+      <input type="text" class="form-control" name="nombre" placeholder="Nombre" required>
+      <select name="tipo" class="form-control" required>
+        <option value="">-- Seleccione tipo --</option>
+        <% categorias.forEach(categoria => { %>
+          <option value="<%= categoria.id %>"><%= categoria.nombre %></option>
+        <% }) %>
+      </select>
+      <input type="number" class="form-control" name="cantidad" placeholder="Cantidad" min="1" required>
+      <select name="ubicacion" class="form-control" required>
+        <option value="">-- Seleccione ubicación --</option>
+        <% ubicaciones.forEach(ubicacion => { %>
+          <option value="<%= ubicacion.id %>"><%= ubicacion.nombre %></option>
+        <% }) %>
+      </select>
+      <select name="estado" class="form-control" required>
+        <option value="">-- Estado --</option>
+        <option value="Bien">Bien</option>
+        <option value="Regular">Regular</option>
+        <option value="Malo">Malo</option>
+      </select>
+      <textarea class="form-control" name="descripcion" placeholder="Descripción" required></textarea>
+
+      <label for="imagen">Imagen</label>
+      <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+      <div class="image-preview">
+        <img id="preview" src="" alt="Preview" style="display:none;">
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="btnGuardar">Guardar</button>
+    </form>
+
+    <div class="mt-3 text-center">
+      <a href="/inventario" class="volver">⬅ Volver al Inventario</a>
+      <!--<a href="/inventario" class="btn btn-primary">⬅ Volver al inventario</a>-->
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Instituto Nuevo Amanecer - Todos los derechos reservados
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  particlesJS("particles-js", { "particles": { "number": { "value": 40 }, "color": { "value": "#FFD966" }, "shape": { "type": "circle" }, "opacity": { "value": 0.7 }, "size": { "value": 4 }, "line_linked": { "enable": true, "distance": 120, "color": "#ffffff", "opacity": 0.9, "width": 1.5 }, "move": { "enable": true, "speed": 1 } }, "interactivity": { "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" } } }, "retina_detect": true });
+
+  const inputImagen = document.getElementById('imagen');
+  const preview = document.getElementById('preview');
+  inputImagen.addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) { const reader = new FileReader(); reader.onload = e => { preview.src = e.target.result; preview.style.display='block'; }; reader.readAsDataURL(file); }
+    else { preview.src=''; preview.style.display='none'; }
+  });
+
+  const form = document.getElementById('formComponente');
+  const btnGuardar = document.getElementById('btnGuardar');
+  form.addEventListener('submit', () => { btnGuardar.disabled = true; btnGuardar.innerText='Guardando...'; });
+</script>
+</body>
+</html>
